@@ -15,7 +15,6 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
     const firstConnectedAccount = firstSocial?.connectedAddresses?.[0]?.address
     const fallback = firstSocial?.userAddress
     address = firstConnectedAccount || fallback
-    console.log("SWEETS address", address)
   } catch (error) {
     console.error('Error parsing JSON from request', error);
   }
@@ -23,7 +22,6 @@ const getResponse = async (req: NextRequest): Promise<NextResponse> => {
 
   const buttons = getButtons(address);
   const imageSrc = `${VERCEL_URL}/api/images/collector/collections?address=${address}`
-  console.log("SWEETS imageSrc", imageSrc)
   const frame = {
     buttons,
     image: {
