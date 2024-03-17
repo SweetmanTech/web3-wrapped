@@ -17,7 +17,7 @@ export async function GET(req: NextRequest) {
   const collectorId = await getEnsName(address);
   const { ImageResponse } = await import('@vercel/og');
   const { fromBlock, toBlock } = await get30DayBlockRange();
-  const filteredLogs = await getErc721TransferEvents([null, address], fromBlock, toBlock);
+  const filteredLogs = await getErc721TransferEvents({ args: [null, address], fromBlock, toBlock });
   const snapshot = formatErc721Events(filteredLogs);
   let soundResponse = await getSoundBatchCollectionMetadata(snapshot);
   soundResponse = soundResponse.sort((a: any, b: any) => b.numberOfEditions - a.numberOfEditions);
