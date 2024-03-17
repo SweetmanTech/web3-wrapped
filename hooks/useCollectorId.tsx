@@ -19,7 +19,7 @@ const useCollectorId = (collectorId: string) => {
       const response = await getAddressSocials(collectorId);
       const firstSocialProfile = response.data.Socials.Social[0];
       setEnsName(firstSocialProfile.profileName);
-      setProfilePic(response.data.Socials.Social[0].profileImage);
+      setProfilePic(firstSocialProfile.profileImage);
     };
 
     if (isAddress(collectorId)) {

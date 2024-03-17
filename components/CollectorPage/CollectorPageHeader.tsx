@@ -5,9 +5,11 @@ const CollectorPageHeader = ({ collectorId, src, total }: any) => (
   >
     <p
       className="flex  items-center  gap-3 text-4xl font-bold tracking-tighter sm:text-5xl"
-      tw="text-7xl font-black m-0"
+      tw="flex  items-center  gap-3 text-7xl font-black m-0"
     >
-      {src && <img height={100} width={100} src={src} className="rounded-full" />}
+      {src && (
+        <img height={100} width={100} src={src} className="rounded-full" tw="rounded-full mr-5" />
+      )}
       {collectorId}
     </p>
     <p className="max-w-[600px] text-md md:text-xl font-bold" tw="text-2xl font-bold m-0">

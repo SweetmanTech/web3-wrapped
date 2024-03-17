@@ -1,12 +1,6 @@
 import { useEffect, useState } from 'react';
 import useCollectorId from './useCollectorId';
-import getErc721TransferEvents from '@/lib/getErc721TransferEvents';
-import formatErc721Events from '@/lib/formatErc721Events';
-import get30DayBlockRange from '@/lib/get30DayBlockRange';
-import getSoundBatchCollectionMetadata from '@/lib/sound/getSoundBatchCollectionMetadata';
-import formatSoundCreatedEvents from '@/lib/sound/formatSoundCreatedEvents';
-import getSoundCreatedEvents from '@/lib/sound/getSoundCreatedEvents';
-import { zeroAddress } from 'viem';
+import getSoundSnapshot from '@/lib/sound/getSoundSnapshot';
 
 const useSnapshot = (collectorId: string) => {
   const [snapshot, setSnapshot] = useState([] as any);
@@ -15,36 +9,9 @@ const useSnapshot = (collectorId: string) => {
 
   useEffect(() => {
     const fetchSnapshot = async () => {
-      const { fromBlock, toBlock } = await get30DayBlockRange();
-      const soundProtocolStartBlock = 109963104n;
-      const soundLogs = await getSoundCreatedEvents(
-        [null, null, collectorAddress],
-        soundProtocolStartBlock,
-        toBlock,
-      );
-      const soundDrops = formatSoundCreatedEvents(soundLogs);
+      const response = await getSoundSnapshot(collectorAddress);
 
-      const soundFilteredLogs = await Promise.all(
-        soundDrops.map(async (soundDrop: string) => {
-          const logs = await getErc721TransferEvents({
-            address: soundDrop,
-            args: [zeroAddress, null],
-            fromBlock,
-            toBlock,
-          });
-          return logs;
-        }),
-      );
-      const soundFlattened = soundFilteredLogs.flat();
-
-      const soundFormatted = formatErc721Events(soundFlattened);
-      let soundResponse = await getSoundBatchCollectionMetadata(soundFormatted);
-
-      soundResponse = soundResponse.sort(
-        (a: any, b: any) => b.numberOfEditions - a.numberOfEditions,
-      );
-
-      setSnapshot(soundResponse);
+      setSnapshot(response);
     };
 
     if (!collectorAddress) return;
