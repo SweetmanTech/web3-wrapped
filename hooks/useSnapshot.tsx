@@ -35,15 +35,11 @@ const useSnapshot = (collectorId: string) => {
           return logs;
         }),
       );
+      const soundFlattened = soundFilteredLogs.flat();
 
-      const filteredLogs = await getErc721TransferEvents({
-        args: [null, collectorAddress],
-        fromBlock,
-        toBlock,
-      });
-      const eventResponse = formatErc721Events(filteredLogs);
+      const soundFormatted = formatErc721Events(soundFlattened);
+      let soundResponse = await getSoundBatchCollectionMetadata(soundFormatted);
 
-      let soundResponse = await getSoundBatchCollectionMetadata(eventResponse);
       soundResponse = soundResponse.sort(
         (a: any, b: any) => b.numberOfEditions - a.numberOfEditions,
       );

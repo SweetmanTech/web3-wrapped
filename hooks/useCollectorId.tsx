@@ -19,12 +19,8 @@ const useCollectorId = (collectorId: string) => {
       const response = await getAddressSocials(collectorId);
       const firstSocialProfile = response.data.Socials.Social[0];
       setEnsName(firstSocialProfile.profileName);
-      console.log('SWEETS firstSocialProfile', firstSocialProfile);
-
       setProfilePic(response.data.Socials.Social[0].profileImage);
     };
-
-    console.log('SWEETS collectorId', collectorId);
 
     if (isAddress(collectorId)) {
       setCollectorAddress(collectorId);
