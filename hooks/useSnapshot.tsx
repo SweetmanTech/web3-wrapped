@@ -10,22 +10,19 @@ import { zeroAddress } from 'viem';
 
 const useSnapshot = (collectorId: string) => {
   const [snapshot, setSnapshot] = useState([] as any);
-  const { collectorAddress } = useCollectorId(collectorId);
+  const collector = useCollectorId(collectorId);
+  const { collectorAddress } = collector;
 
   useEffect(() => {
     const fetchSnapshot = async () => {
       const { fromBlock, toBlock } = await get30DayBlockRange();
-
-      console.log('SWEETS get sound logs', collectorAddress);
-
+      const soundProtocolStartBlock = 109963104n;
       const soundLogs = await getSoundCreatedEvents(
         [null, null, collectorAddress],
-        109963104n,
+        soundProtocolStartBlock,
         toBlock,
       );
-      console.log('SWEETS sound logs', soundLogs);
       const soundDrops = formatSoundCreatedEvents(soundLogs);
-      console.log('SWEETS soundDrops', soundDrops);
 
       const soundFilteredLogs = await Promise.all(
         soundDrops.map(async (soundDrop: string) => {
@@ -38,7 +35,6 @@ const useSnapshot = (collectorId: string) => {
           return logs;
         }),
       );
-      console.log('SWEETS soundFilteredLogs', soundFilteredLogs);
 
       const filteredLogs = await getErc721TransferEvents({
         args: [null, collectorAddress],
@@ -59,7 +55,7 @@ const useSnapshot = (collectorId: string) => {
     fetchSnapshot();
   }, [collectorAddress]);
 
-  return { snapshot };
+  return { snapshot, ...collector };
 };
 
 export default useSnapshot;

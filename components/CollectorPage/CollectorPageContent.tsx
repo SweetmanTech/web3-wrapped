@@ -4,11 +4,11 @@ import CollectorPageHeader from './CollectorPageHeader';
 import Results from './Results';
 
 const CollectorPageContent = () => {
-  const { collectorId, snapshot } = useCollectorProvider();
+  const { collectorAddress, snapshot, ensName, profilePic } = useCollectorProvider();
 
   return (
     <div className="container flex flex-col items-center justify-center gap-4 px-4 text-center sm:gap-8 md:px-6">
-      <CollectorPageHeader collectorId={collectorId} />
+      <CollectorPageHeader collectorId={ensName || collectorAddress} src={profilePic} />
       <Results snapshot={snapshot} />
       <MadeBySweets />
     </div>

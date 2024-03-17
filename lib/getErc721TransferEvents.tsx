@@ -15,7 +15,6 @@ const getErc721TransferEvents = async ({ args, fromBlock, toBlock, address }: an
     logConfig.args = args;
   }
 
-  console.log('SWEETS logConfig', logConfig);
   const logs = await optimismPublicClient.getLogs(logConfig);
 
   const filteredErc721Logs = logs.filter((log: any) => log.args && log.args.length === 2);
