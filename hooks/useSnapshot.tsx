@@ -1,12 +1,5 @@
 import { useEffect, useState } from 'react';
 import useCollectorId from './useCollectorId';
-import getErc721TransferEvents from '@/lib/getErc721TransferEvents';
-import formatErc721Events from '@/lib/formatErc721Events';
-import get30DayBlockRange from '@/lib/get30DayBlockRange';
-import getSoundBatchCollectionMetadata from '@/lib/sound/getSoundBatchCollectionMetadata';
-import formatSoundCreatedEvents from '@/lib/sound/formatSoundCreatedEvents';
-import getSoundCreatedEvents from '@/lib/sound/getSoundCreatedEvents';
-import { zeroAddress } from 'viem';
 import getSoundSnapshot from '@/lib/sound/getSoundSnapshot';
 
 const useSnapshot = (collectorId: string) => {
@@ -16,7 +9,7 @@ const useSnapshot = (collectorId: string) => {
 
   useEffect(() => {
     const fetchSnapshot = async () => {
-      const response = getSoundSnapshot(collectorAddress);
+      const response = await getSoundSnapshot(collectorAddress);
 
       setSnapshot(response);
     };
