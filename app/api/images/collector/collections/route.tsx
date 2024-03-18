@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
   const firstSocialProfile = response.data.Socials.Social[0];
   const collectorId = firstSocialProfile.profileName;
   const profilePic = firstSocialProfile.profileImage;
-  const soundResponse = await getSoundSnapshot(address);
+  const soundResponse = await getSoundSnapshot(address, 10);
   const totalNumberOfEditions = (soundResponse as any).reduce(
     (total: number, item: any) => total + item.numberOfEditions,
     0,

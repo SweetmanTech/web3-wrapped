@@ -5,14 +5,16 @@ import formatSoundCreatedEvents from './formatSoundCreatedEvents';
 import getErc721TransferEvents from '../getErc721TransferEvents';
 import formatErc721Events from '../formatErc721Events';
 import getSoundBatchCollectionMetadata from './getSoundBatchCollectionMetadata';
+import { optimism } from 'viem/chains';
 
-const getSoundSnapshot = async (creatorAddress: string) => {
-  const { fromBlock, toBlock } = await get30DayBlockRange();
+const getSoundSnapshot = async (creatorAddress: string, chainId: number = optimism.id) => {
+  const { fromBlock, toBlock } = await get30DayBlockRange(chainId);
   const soundProtocolStartBlock = 109963104n;
   const soundLogs = await getSoundCreatedEvents(
     [null, null, creatorAddress],
     soundProtocolStartBlock,
     toBlock,
+    chainId,
   );
 
   const soundDrops = formatSoundCreatedEvents(soundLogs);
@@ -24,6 +26,7 @@ const getSoundSnapshot = async (creatorAddress: string) => {
         args: [zeroAddress, null],
         fromBlock,
         toBlock,
+        chainId,
       });
       return logs;
     }),
@@ -33,7 +36,7 @@ const getSoundSnapshot = async (creatorAddress: string) => {
 
   const soundFormatted = formatErc721Events(soundFlattened);
 
-  let soundResponse = await getSoundBatchCollectionMetadata(soundFormatted);
+  let soundResponse = await getSoundBatchCollectionMetadata(soundFormatted, chainId);
 
   soundResponse = soundResponse.sort((a: any, b: any) => b.numberOfEditions - a.numberOfEditions);
   return soundResponse;

@@ -1,7 +1,8 @@
-import { optimismPublicClient } from './publicClient';
+import { getPublicClient } from './clients';
 
-const get30DayBlockRange = async () => {
-  const block = await optimismPublicClient.getBlock({
+const get30DayBlockRange = async (chainId: number) => {
+  const client = getPublicClient(chainId);
+  const block = await client.getBlock({
     blockTag: 'latest',
   });
   const toBlock = block.number;

@@ -1,7 +1,7 @@
 import { parseAbiItem } from 'viem';
-import { optimismPublicClient } from './publicClient';
+import { getPublicClient } from './clients';
 
-const getErc721TransferEvents = async ({ args, fromBlock, toBlock, address }: any) => {
+const getErc721TransferEvents = async ({ args, fromBlock, toBlock, address, chainId }: any) => {
   const logConfig = {
     event: parseAbiItem('event Transfer(address indexed, address indexed, uint256)'),
     fromBlock,
@@ -15,7 +15,8 @@ const getErc721TransferEvents = async ({ args, fromBlock, toBlock, address }: an
     logConfig.args = args;
   }
 
-  const logs = await optimismPublicClient.getLogs(logConfig);
+  const client = getPublicClient(chainId);
+  const logs = await client.getLogs(logConfig);
 
   const filteredErc721Logs = logs.filter((log: any) => log.args && log.args.length === 2);
   return filteredErc721Logs;

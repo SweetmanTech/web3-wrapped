@@ -1,7 +1,7 @@
 import { erc721Abi } from 'viem';
-import { optimismPublicClient } from '../publicClient';
+import { getPublicClient } from '../clients';
 
-const getSoundBatchCollectionMetadata = async (formattedSoundCollections: any) => {
+const getSoundBatchCollectionMetadata = async (formattedSoundCollections: any, chainId: number) => {
   const soundContract = {
     abi: erc721Abi,
     functionName: 'tokenURI',
@@ -13,7 +13,8 @@ const getSoundBatchCollectionMetadata = async (formattedSoundCollections: any) =
     ...soundContract,
   }));
 
-  const results = await optimismPublicClient.multicall({ contracts });
+  const client = getPublicClient(chainId);
+  const results = await client.multicall({ contracts });
   const filteredResults = results.filter((result: any) => result.result.startsWith('ar://'));
 
   const fetchPromises = filteredResults.map((result: any) => {
